@@ -6,14 +6,26 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 #include <assert.h>
 #include <math.h>
 
-typedef struct vect3_s vect3;
-typedef struct vect4_s vect4;
+typedef struct vect3_s {
+    float x, y, z;
+} vect3;
 
-typedef struct mat3_s mat3;
-typedef struct mat4_s mat4;
+typedef struct vect4_s {
+    float w, x, y, z;
+} vect4;
+
+
+typedef struct mat3_s {
+    vect3 cols[3];
+} mat3;
+
+typedef struct mat4_s {
+    vect4 cols[4];
+} mat4;
 
 
 mat3 add_3(mat3, mat3); //Additionne 2 matrice 3*3

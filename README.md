@@ -27,35 +27,32 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🔹 PHASE 2 — **Représentation de la scène** (En cours)
+## 🔹 PHASE 2 — **Représentation de la scène** (Finie, 4 testée, 5 non testée)
 
 > On passe de la théorie à la modélisation d’objets 3D et de leur place dans une scène globale.
 
-### 4 Objet 3D (En cours)
-- Liste de sommets, textures, normales, faces (coordonnées locales)
-- Désérialisation fichier .obj
+### 4 Objet 3D (Complété)
+- Liste de sommets, textures, normales, faces (coordonnées locales) ✅
+- Désérialisation fichier simple .obj (composé uniquement de v, vn, vt, f) ✅
 
-### 5 Repères
-- **Local** : chaque objet possède son propre repère
-- **Monde** : tous les objets sont convertis dans un repère global
-
-### 6 Caméra
-- Définie par un repère propre (position + base orthonormée)
-- Permet d'observer la scène depuis un point de vue donné
+### 5 Repères (Complété)
+- **Local** : chaque objet possède son propre repère ✅
+- **Caméra** : repère propre (position + base orthonormée) afin d'observer la scène depuis un point de vue donné ✅
+- **Monde** : tous les objets sont convertis dans un repère global, celui de la caméra ✅
 
 ---
 
-## 🔹 PHASE 3 — **Pipeline de rendu**
+## 🔹 PHASE 3 — **Pipeline de rendu** (En cours)
 
 > Transformation complète d’un objet local jusqu’à sa projection sur un écran.
 
-### 7 Étapes du pipeline
-1. Objet (repère local) → repère monde  
-2. Monde → repère caméra (vue)  
+### 6 Étapes du pipeline (En cours)
+1. Objet (repère local) → repère monde   ✅
+2. Monde → repère caméra (vue) ✅
 3. Caméra → plan image (projection perspective ou ortho)  
 4. Plan image → écran (2D)
 
-### 8 Projection
+### 7 Projection
 - Projection perspective (option : orthographique)
 - Division par la profondeur (x/z, y/z)
 - Application d'une *viewport* (fenêtre d'affichage)
@@ -66,11 +63,12 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 > Enfin, on trace les formes à l’écran. 
 
-### 9 Rendu wireframe
+### 8 Rendu wireframe
 - Transformation des sommets jusqu’à l’écran
 - Tracé des arêtes entre les points projetés
+- Nuance de lumière avec méthode de Lambert
 
-### 10 Rasterisation simple
+### 9 Rasterisation simple
 - Console : rendu ASCII, repère Y inversé
 - SDL2 ou autre lib graphique : lignes 2D dans une fenêtre
 
@@ -80,12 +78,12 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 > On donne vie à la scène : zoom, rotation, déplacement…
 
-### 11 Contrôles utilisateur
+### 10 Contrôles utilisateur
 - Rotation de la caméra autour de l’objet
 - Zoom / dézoom
 - Translation latérale (*pan*)
 
-### 12 Navigation & animation
+### 11 Navigation & animation
 - Mise à jour du repère caméra selon les entrées
 - Rafraîchissement continu de l’affichage
 
@@ -98,6 +96,10 @@ Créer un visualisateur 3D **interactif** et **fluide**, qui permette de tourner
 ---
 
 > ✨ Si j’arrive au bout : **je fais un post LinkedIn.**
+
+## Sources :
+https://fr.wikipedia.org/wiki/Objet_3D_(format_de_fichier)
+https://fr.wikipedia.org/wiki/Projection_centrale
 
 
 
