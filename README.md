@@ -6,21 +6,21 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🔹 PHASE 1 — **Géométrie & mathématiques 3D**
+## 🔹 PHASE 1 — **Géométrie & mathématiques 3D** (En cours)
 
 > Premier objectif : poser les bases mathématiques et les outils de transformation pour manipuler des objets dans l’espace.
 
-### 1 Structures fondamentales
-- `Vec3` : vecteurs 3D pour représenter points ou directions.
-- `Mat3` : matrices 3×3 pour les rotations.
-- `Mat4` : matrices 4×4 pour les transformations affines (rotation + translation).
+### 1 Structures fondamentales (Complété)
+- `Vec3` : vecteurs 3D pour représenter points ou directions. ✅
+- `Mat3` : matrices 3×3 pour les rotations. ✅
+- `Mat4` : matrices 4×4 pour les transformations affines (rotation + translation). ✅
 
-### 2 Opérations vectorielles
-- Addition, soustraction
-- Produit scalaire et vectoriel
-- Normalisation, calcul de norme
+### 2 Opérations vectorielles (Complété)
+- Addition, soustraction ✅
+- Produit scalaire et vectoriel ✅
+- Normalisation, calcul de norme ✅
 
-### 3 Transformations
+### 3 Transformations (En cours)
 - Rotations autour des axes X, Y, Z
 - Passage entre repères (changement de base)
 - Inversion de matrice de rotation (transposition si orthonormée)
