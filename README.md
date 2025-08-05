@@ -21,7 +21,7 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 - Normalisation, calcul de norme ✅
 
 ### 3 Transformations (En cours)
-- Rotations autour des axes X, Y, Z
+- Rotations autour d'un axe quelconque ✅
 - Passage entre repères (changement de base)
 - Inversion de matrice de rotation (transposition si orthonormée)
 
