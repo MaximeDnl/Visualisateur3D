@@ -1,5 +1,5 @@
-# 🌀 Visualisateur3D  
-🎯 **Projet personnel en C : moteur de rendu 3D from scratch**
+# Visualisateur3D  
+**Projet personnel en C : moteur de rendu 3D from scratch**
  
 L'objectif : construire un visualisateur 3D (ou un mini moteur de rendu), étape par étape dans le langage de programmation C, en comprenant chaque brique.  
 Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les références avec les fichiers correspondants (:
