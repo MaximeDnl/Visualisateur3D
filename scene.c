@@ -227,10 +227,11 @@ void translate_camera(scene* sc, vect3 translation) {
 }
 
 void ajouter_item(scene* sc, item it) {
-    if (sc->cpt_items == sc->taille_tab_items) {
-        if (sc->taille_tab_items == 0) {
+    if(sc->cpt_items == sc->taille_tab_items){
+        if(sc->taille_tab_items == 0){
             sc->taille_tab_items = 1;
-        } else {
+        } 
+        else{
             sc->taille_tab_items *= 2;
         }
         sc->items = realloc(sc->items, sizeof(item) * sc->taille_tab_items);
@@ -242,19 +243,32 @@ void ajouter_item(scene* sc, item it) {
 void change_ref_item_scene(scene* sc){//Idée est de changer les références des items de la scène pour qu'ils soient dans le repère de la caméra
     for(int i = 0; i < sc->cpt_items; i++){
         item* it = &sc->items[i];
-        mat3 base_ref = { {it->u1, it->u2, it->u3} };
-        mat3 new_ref = { {sc->cam.u1, sc->cam.u2, sc->cam.u3} };
+        mat3 base_ref = {it->u1, it->u2, it->u3} ;
+        mat3 new_ref = {sc->cam.u1, sc->cam.u2, sc->cam.u3};
         it->u1 = change_ref(it->u1, base_ref, new_ref);
         it->u2 = change_ref(it->u2, base_ref, new_ref);
         it->u3 = change_ref(it->u3, base_ref, new_ref);
         for(int j = 0; j < it->cpt_sommets; j++){
             it->tab_sommets[j].position = change_ref(it->tab_sommets[j].position, base_ref, new_ref);
+            it->tab_sommets[j].position.x -= sc->cam.position.x; //Afin de placer correctement les sommets dans le repère de la caméra
+            it->tab_sommets[j].position.y -= sc->cam.position.y;
+            it->tab_sommets[j].position.z -= sc->cam.position.z;
         }
     }
 
 }
 
+void free_scene(scene* sc) {
+    for(int i = 0; i < sc->cpt_items; i++) {
+        free_item(&sc->items[i]);
+    }
+    free(sc->items);
+    sc->items = NULL;
+    sc->cpt_items = 0;
+    sc->taille_tab_items = 0;
+}
 
+/* 
 int main(){
     item it = deserialize_item("teapot.obj");
     printf("Nombre de sommets : %d\n", it.cpt_sommets);
@@ -262,7 +276,28 @@ int main(){
     printf("Nombre de coordonnées de texture : %d\n", it.cpt_text);
     printf("Nombre de faces : %d\n", it.cpt_faces);
     printf("Nombre de propriétés : %d\n", it.cpt_props);
-    free_item(&it);
+    
+    scene sc;
+    sc.items = NULL;
+    sc.cam.position = (vect3){0, 0, 5}; // Position de la caméra
+    sc.cam.u1 = (vect3){1, 0, 0}; // Vecteur de base pour référence
+    sc.cam.u2 = (vect3){0, 1, 0}; // Vecteur de base pour référence
+    sc.cam.u3 = (vect3){0, 0, 1}; // Vecteur de base pour référence
+    sc.taille_tab_items = 0; // Taille du tableau d'items
+    sc.cpt_items = 0; // Compteur d'items dans la scène
+
+    rotate_camera(&sc, M_PI / 4, (vect3){0, 1, 0}); // Rotation de la caméra de 45° autour de l'axe Y
+    translate_camera(&sc, (vect3){31, -6, 2}); //
+
+    ajouter_item(&sc, it);
+
+    printf("Coordonnées du premier sommet : (%f, %f, %f)\n", sc.items[0].tab_sommets[0].position.x, sc.items[0].tab_sommets[0].position.y, sc.items[0].tab_sommets[0].position.z);
+
+    change_ref_item_scene(&sc);
+
+    printf("Coordonnées du premier sommet après changement de référence : (%f, %f, %f)\n", sc.items[0].tab_sommets[0].position.x, sc.items[0].tab_sommets[0].position.y, sc.items[0].tab_sommets[0].position.z);
+
+    free_scene(&sc);
 
     return 0;
-}
+} */

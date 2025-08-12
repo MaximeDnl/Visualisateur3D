@@ -42,30 +42,26 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🔹 PHASE 3 — **Pipeline de rendu** (En cours)
+## 🔹 PHASE 3 — **Pipeline de rendu / Affichage** (En cours)
 
 > Transformation complète d’un objet local jusqu’à sa projection sur un écran.
 
-### 6 Étapes du pipeline (En cours)
+### 6 Uniformisation des bases (En cours)
 1. Objet (repère local) → repère monde   ✅
 2. Monde → repère caméra (vue) ✅
-3. Caméra → plan image (projection perspective ou ortho)  
-4. Plan image → écran (2D)
 
 ### 7 Projection
-- Projection perspective (option : orthographique)
-- Division par la profondeur (x/z, y/z)
-- Application d'une *viewport* (fenêtre d'affichage)
+- Caméra → plan image (projection perspective) ✅
+- Division par la profondeur (x/z, y/z) ✅
+- Application d'une *viewport* (fenêtre d'affichage) ✅
+ 
+### 8 1er Rendu wireframe (points & segments)
+- Transformation des sommets jusqu’à l’écran ✅
+- Tracé des arêtes entre les points projetés (Algo de Bresenham) ✅
 
----
-
-## 🔹 PHASE 4 — **Affichage**
-
-> Enfin, on trace les formes à l’écran. 
-
-### 8 Rendu wireframe
-- Transformation des sommets jusqu’à l’écran
-- Tracé des arêtes entre les points projetés
+### 9 2e Rendu wireframe (faces)
+- Affichage des faces
+- Système de priorité d'affichage (afin d'afficher que le visible)
 - Nuance de lumière avec méthode de Lambert
 
 ### 9 Rasterisation simple
@@ -74,7 +70,7 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🔹 PHASE 5 — **Interaction**
+## 🔹 PHASE 4 — **Interaction**
 
 > On donne vie à la scène : zoom, rotation, déplacement…
 
@@ -100,10 +96,12 @@ Créer un visualisateur 3D **interactif** et **fluide**, qui permette de tourner
 ## Sources :
 https://fr.wikipedia.org/wiki/Objet_3D_(format_de_fichier)
 https://fr.wikipedia.org/wiki/Projection_centrale
+https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_de_segment_de_Bresenham
+https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm
 
 
 
-
+Commande pour compiler : gcc -Wextra -Werror -pedantic -fsanitize=address -o main proj.c scene.c mat.c -lm -ljpeg
 
 
 

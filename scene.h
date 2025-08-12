@@ -154,7 +154,7 @@ typedef struct item_s {
 } item;
 
 typedef struct camera_s {
-    vect3 position; //Position de la caméra
+    vect3 position; //Position de la caméra selon le repère monde
     vect3 u1; //Vecteur de base pour référence
     vect3 u2; //Vecteur de base pour référence
     vect3 u3; //Vecteur de base pour référence
@@ -163,7 +163,7 @@ typedef struct camera_s {
 typedef struct scene_s {
     item* items; //Tableau d'items
     camera cam; //Caméra de la scène
-    int cpt_items; //Compteur d'items
+    int cpt_items; //Compteur d'items dans la scène
     int taille_tab_items; //Taille du tableau d'items
 } scene;
 
@@ -187,5 +187,8 @@ void ajouter_item(scene*, item); //Ajoute un item à la scène
 
 void change_ref_item_scene(scene*); //Change la référence des items de la scène pour qu'ils soient dans le repère de la caméra 
 //Permet de préparer le terrain pour l'affichage en 3D
+
+void free_scene(scene*); //Libère la mémoire allouée pour une scène
+// /!\ Attention, cette fonction libère la memoire allouée pour les items de la scene
 
 #endif
