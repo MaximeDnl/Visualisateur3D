@@ -64,7 +64,7 @@ Ci-dessous est décrit les différentes étapes du projet. Cette segmentation s'
 
 ## 🔹 Phase 4 — **Affichage avec faces pleines**
 
-### 9 2e Rendu wireframe (faces)
+### 9 2e Rendu (faces pleines)
 - Affichage des faces
 - Système de priorité d'affichage (afin d'afficher que le visible)
 - Nuance de lumière avec méthode de Lambert
