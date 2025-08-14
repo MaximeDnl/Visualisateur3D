@@ -87,9 +87,9 @@ Ci-dessous est décrit les différentes étapes du projet.
 
 ## Résultats :
  
-<img src="teapot360.gif" alt="Aperçu d'une téhière" width="1000"/>
+<img src="images/teapot360.gif" alt="Aperçu d'une téhière" width="1000"/>
 
-<img src="cow.gif" alt="Aperçu d'une vache" width="1000"/>
+<img src="images/cow.gif" alt="Aperçu d'une vache" width="1000"/>
 
 ---
 

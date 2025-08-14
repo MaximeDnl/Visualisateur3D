@@ -200,7 +200,7 @@ int main(){
     rotate_item(&sc.items[0], M_PI, sc.items[0].u3);
 
     plan* p = projeter_scene(&sc); // Re-projeter la scène après rotation
-    affichage_plan(p, &sc, "projection001.jpg");
+    affichage_plan(p, &sc, "../images/projection.jpg");
    
     int steps = 361; // Number of frames in the circle
 
@@ -213,7 +213,7 @@ int main(){
         //rotate_camera(&sc, (M_PI*2)/360, sc.cam.u2);
 
         p = projeter_scene(&sc);
-        affichage_plan(p, &sc, "projection.jpg"); // Save the projection to a file
+        affichage_plan(p, &sc, "../images/projection.jpg"); // Save the projection to a file
     }
 
     free_scene(&sc);
