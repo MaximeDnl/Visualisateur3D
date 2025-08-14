@@ -177,7 +177,7 @@ mat3 transpose(mat3 m){
 mat3 inverse(mat3 m) {
     float det = determinant(m);
     if (det == 0) {
-        fprintf(stderr, "Error: Matrix is not invertible (determinant is zero).\n");
+        fprintf(stderr, "Erreur, matrice non inversible.\n");
         exit(EXIT_FAILURE);
     }
 
