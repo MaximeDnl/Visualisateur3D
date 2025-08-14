@@ -161,7 +161,8 @@ typedef struct camera_s {
 } camera;
 
 typedef struct scene_s {
-    item* items; //Tableau d'items
+    item* items_ref_perso; //Tableau d'items qui restent dans leur propre base
+    item* items; //Tableau d'items dans ref de cam
     camera cam; //Caméra de la scène
     int cpt_items; //Compteur d'items dans la scène
     int taille_tab_items; //Taille du tableau d'items
@@ -177,12 +178,17 @@ void ajouter_face(item*, face);
 item deserialize_item(const char*); //Fonction de désérialisation d'un item à partir d'un fichier .obj simple (composé uniquement de v, vn, vt, f).
 void free_item(item*); //Libère la mémoire allouée pour un item
 
-void rotate_item(item*, float, vect3); //Applique une rotation à l'item autour d'un axe donné
+void rotate_item(item*, float, vect3); //Applique une rotation à l'item autour d'un axe donné et de son centre, attention a appliquer la rotation sur sc.items et non sc.items_ref_perso
 void translate_item(item*, vect3); //Applique une translation à l'item
+// /!\ Attention, toujours appliquer un change_ref_item_scene ou un projeter_scene après une rotation ou translation d'un objet
+//Sinon l'application d'autres fonctions n'est pas cohérente
 
 void rotate_camera(scene*, float, vect3); //Applique une rotation à la caméra de la scène
 void translate_camera(scene*, vect3); //Applique une translation à la caméra de la scène
+// /!\ Attention, toujours appliquer un change_ref_item_scene ou un projeter_scene après une rotation ou translation de la caméra
+//Sinon l'application d'autres fonctions n'est pas cohérente
 
+scene init_scene();
 void ajouter_item(scene*, item); //Ajoute un item à la scène
 
 void change_ref_item_scene(scene*); //Change la référence des items de la scène pour qu'ils soient dans le repère de la caméra 

@@ -198,28 +198,3 @@ vect3 change_ref(vect3 v, mat3 base_ref, mat3 new_ref){
     mat3 inv_new_ref = inverse(new_ref);
     return product_mat_vect3(product(inv_new_ref, base_ref), v);
 }
-
-/* int main(){
-    mat3 m;
-    m.cols[0].x = 3.;
-    m.cols[0].y = 0.;
-    m.cols[0].z = 1.;
-    m.cols[1].x = 2.;
-    m.cols[1].y = 5.;
-    m.cols[1].z = 2.;
-    m.cols[2].x = 89.;
-    m.cols[2].y = 6.;
-    m.cols[2].z = 3.;
-
-    affiche_3(inverse(m));
-    
-    mat3 m2 = add_3(m, m);
-    affiche_3(m2);
-
-    mat3 m3 = product(m, m2);
-    affiche_3(m3);
-
-    affiche_3(rotation_mat(M_PI / 4, (vect3){0, 0, 1})); 
-
-    return 0;
-} */

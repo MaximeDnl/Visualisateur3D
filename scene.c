@@ -189,10 +189,16 @@ void free_item(item* it) {
     free(it->tab_props);
 }
 
-void rotate_item(item* it, float angle, vect3 axis) {
+void rotate_item(item* it, float angle, vect3 axis){
     mat3 rotation = rotation_mat(angle, axis);
-    for (int i = 0; i < it->cpt_sommets; i++) {
-        it->tab_sommets[i].position = product_mat_vect3(rotation, it->tab_sommets[i].position);
+    for (int i = 0; i < it->cpt_sommets; i++){
+        it->tab_sommets[i].position.x -= it->origine.x; // Déplacer le sommet par rapport à l'origine
+        it->tab_sommets[i].position.y -= it->origine.y;
+        it->tab_sommets[i].position.z -= it->origine.z;
+        it->tab_sommets[i].position = product_mat_vect3(rotation, it->tab_sommets[i].position); // Appliquer la rotation
+        it->tab_sommets[i].position.x += it->origine.x; // Replacer le sommet à sa position d'origine
+        it->tab_sommets[i].position.y += it->origine.y;
+        it->tab_sommets[i].position.z += it->origine.z;
     }
     // Mettre à jour les vecteurs de base
     it->u1 = product_mat_vect3(rotation, it->u1);
@@ -214,16 +220,31 @@ void translate_item(item* it, vect3 translation) {
 
 void rotate_camera(scene* sc, float angle, vect3 axis) {
     mat3 rotation = rotation_mat(angle, axis);
-    sc->cam.position = product_mat_vect3(rotation, sc->cam.position);
+    //sc->cam.position = product_mat_vect3(rotation, sc->cam.position);
     sc->cam.u1 = product_mat_vect3(rotation, sc->cam.u1);
     sc->cam.u2 = product_mat_vect3(rotation, sc->cam.u2);
     sc->cam.u3 = product_mat_vect3(rotation, sc->cam.u3);
+
+    //change_ref_item_scene(sc); // Met à jour les références des items de la scène
 }
 
 void translate_camera(scene* sc, vect3 translation) {
     sc->cam.position.x += translation.x;
     sc->cam.position.y += translation.y;
     sc->cam.position.z += translation.z;
+}
+
+scene init_scene(){
+    scene sc;
+    sc.items = NULL;
+    sc.items_ref_perso = NULL;
+    sc.cam.position = (vect3){0, 0, 0}; // Position de la caméra
+    sc.cam.u1 = (vect3){1, 0, 0}; // Vecteur de base pour référence
+    sc.cam.u2 = (vect3){0, 1, 0}; // Vecteur de base pour référence
+    sc.cam.u3 = (vect3){0, 0, 1}; // Vecteur de base pour référence
+    sc.taille_tab_items = 0; // Taille du tableau d'items
+    sc.cpt_items = 0; // Compteur d'items dans la scène
+    return sc;
 }
 
 void ajouter_item(scene* sc, item it) {
@@ -234,70 +255,68 @@ void ajouter_item(scene* sc, item it) {
         else{
             sc->taille_tab_items *= 2;
         }
-        sc->items = realloc(sc->items, sizeof(item) * sc->taille_tab_items);
+        item* tmp_items = realloc(sc->items, sizeof(item) * sc->taille_tab_items);
+        if (!tmp_items) { perror("realloc items failed"); exit(1); }
+        sc->items = tmp_items;
+
+        item* tmp_items_ref = realloc(sc->items_ref_perso, sizeof(item) * sc->taille_tab_items);
+        if (!tmp_items_ref) { perror("realloc items_ref_perso failed"); exit(1); }
+        sc->items_ref_perso = tmp_items_ref;
     }
     sc->items[sc->cpt_items] = it;
+    sc->items_ref_perso[sc->cpt_items] = it;
+
+    // On change la ref de l'item pour qu'il soit dans le repère de la caméra
+    mat3 base_ref = {it.u1, it.u2, it.u3} ;
+    mat3 new_ref = {sc->cam.u1, sc->cam.u2, sc->cam.u3};
+    (&sc->items[sc->cpt_items])->u1 = normalize(change_ref(it.u1, base_ref, new_ref));
+    (&sc->items[sc->cpt_items])->u2 = normalize(change_ref(it.u2, base_ref, new_ref));
+    (&sc->items[sc->cpt_items])->u3 = normalize(change_ref(it.u3, base_ref, new_ref));
+    for(int j = 0; j < it.cpt_sommets; j++){
+        (&sc->items[sc->cpt_items])->tab_sommets[j].position = change_ref(it.tab_sommets[j].position, base_ref, new_ref);
+        (&sc->items[sc->cpt_items])->tab_sommets[j].position.x = it.tab_sommets[j].position.x - sc->cam.position.x; //Afin de placer correctement les sommets dans le repère de la caméra
+        (&sc->items[sc->cpt_items])->tab_sommets[j].position.y = it.tab_sommets[j].position.y - sc->cam.position.y;
+        (&sc->items[sc->cpt_items])->tab_sommets[j].position.z = it.tab_sommets[j].position.z - sc->cam.position.z;
+    }
     sc->cpt_items++;
 }
 
 void change_ref_item_scene(scene* sc){//Idée est de changer les références des items de la scène pour qu'ils soient dans le repère de la caméra
     for(int i = 0; i < sc->cpt_items; i++){
-        item* it = &sc->items[i];
+        item* it = &sc->items_ref_perso[i];
+        item* it_ref_cam = &sc->items[i];
         mat3 base_ref = {it->u1, it->u2, it->u3} ;
         mat3 new_ref = {sc->cam.u1, sc->cam.u2, sc->cam.u3};
-        it->u1 = change_ref(it->u1, base_ref, new_ref);
-        it->u2 = change_ref(it->u2, base_ref, new_ref);
-        it->u3 = change_ref(it->u3, base_ref, new_ref);
+        it_ref_cam->u1 = normalize(change_ref(it->u1, base_ref, new_ref));
+        it_ref_cam->u2 = normalize(change_ref(it->u2, base_ref, new_ref));
+        it_ref_cam->u3 = normalize(change_ref(it->u3, base_ref, new_ref));
+        it_ref_cam->origine = change_ref(it->origine, base_ref, new_ref);
+        it_ref_cam->origine.x = it->origine.x - sc->cam.position.x; // Afin de placer correctement l'origine dans le repère de la caméra
+        it_ref_cam->origine.y = it->origine.y - sc->cam.position.y;
+        it_ref_cam->origine.z = it->origine.z - sc->cam.position.z;
+
         for(int j = 0; j < it->cpt_sommets; j++){
-            it->tab_sommets[j].position = change_ref(it->tab_sommets[j].position, base_ref, new_ref);
-            it->tab_sommets[j].position.x -= sc->cam.position.x; //Afin de placer correctement les sommets dans le repère de la caméra
-            it->tab_sommets[j].position.y -= sc->cam.position.y;
-            it->tab_sommets[j].position.z -= sc->cam.position.z;
+            it_ref_cam->tab_sommets[j].position = change_ref(it->tab_sommets[j].position, base_ref, new_ref);;
+            /* it_ref_cam->tab_sommets[j].position.x = it->tab_sommets[j].position.x - sc->cam.position.x; //Afin de placer correctement les sommets dans le repère de la caméra
+            it_ref_cam->tab_sommets[j].position.y = it->tab_sommets[j].position.y - sc->cam.position.y;
+            it_ref_cam->tab_sommets[j].position.z = it->tab_sommets[j].position.z - sc->cam.position.z; */
         }
     }
-
 }
 
 void free_scene(scene* sc) {
+    if (!sc) return;
+
     for(int i = 0; i < sc->cpt_items; i++) {
-        free_item(&sc->items[i]);
+        free_item(&sc->items[i]); // libèration des ressources de chaque item
     }
+
     free(sc->items);
     sc->items = NULL;
+
+    free(sc->items_ref_perso);
+    sc->items_ref_perso = NULL;
+
     sc->cpt_items = 0;
     sc->taille_tab_items = 0;
 }
-
-/* 
-int main(){
-    item it = deserialize_item("teapot.obj");
-    printf("Nombre de sommets : %d\n", it.cpt_sommets);
-    printf("Nombre de normales : %d\n", it.cpt_normales);
-    printf("Nombre de coordonnées de texture : %d\n", it.cpt_text);
-    printf("Nombre de faces : %d\n", it.cpt_faces);
-    printf("Nombre de propriétés : %d\n", it.cpt_props);
-    
-    scene sc;
-    sc.items = NULL;
-    sc.cam.position = (vect3){0, 0, 5}; // Position de la caméra
-    sc.cam.u1 = (vect3){1, 0, 0}; // Vecteur de base pour référence
-    sc.cam.u2 = (vect3){0, 1, 0}; // Vecteur de base pour référence
-    sc.cam.u3 = (vect3){0, 0, 1}; // Vecteur de base pour référence
-    sc.taille_tab_items = 0; // Taille du tableau d'items
-    sc.cpt_items = 0; // Compteur d'items dans la scène
-
-    rotate_camera(&sc, M_PI / 4, (vect3){0, 1, 0}); // Rotation de la caméra de 45° autour de l'axe Y
-    translate_camera(&sc, (vect3){31, -6, 2}); //
-
-    ajouter_item(&sc, it);
-
-    printf("Coordonnées du premier sommet : (%f, %f, %f)\n", sc.items[0].tab_sommets[0].position.x, sc.items[0].tab_sommets[0].position.y, sc.items[0].tab_sommets[0].position.z);
-
-    change_ref_item_scene(&sc);
-
-    printf("Coordonnées du premier sommet après changement de référence : (%f, %f, %f)\n", sc.items[0].tab_sommets[0].position.x, sc.items[0].tab_sommets[0].position.y, sc.items[0].tab_sommets[0].position.z);
-
-    free_scene(&sc);
-
-    return 0;
-} */

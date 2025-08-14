@@ -163,14 +163,13 @@ void affichage_plan(plan* p, scene* sc, char* fichier){
             int idx0 = f.sommet[0].v;
             int idx1 = f.sommet[1].v;
             int idx2 = f.sommet[2].v;
-            printf("Face %d de l'item %d : sommets %d, %d, %d\n", num_face, i, idx0, idx1, idx2);
+            //printf("Face %d de l'item %d : sommets %d, %d, %d\n", num_face, i, idx0, idx1, idx2);
 
             dessiner_segment(buffer, p->longueur, p->largeur, (int)p->positions_x[idx0], (int)p->positions_y[idx0], (int)p->positions_x[idx1], (int)p->positions_y[idx1], 0, 255, 0);
             dessiner_segment(buffer, p->longueur, p->largeur, (int)p->positions_x[idx1], (int)p->positions_y[idx1], (int)p->positions_x[idx2], (int)p->positions_y[idx2], 0, 255, 0);
             dessiner_segment(buffer, p->longueur, p->largeur, (int)p->positions_x[idx2], (int)p->positions_y[idx2], (int)p->positions_x[idx0], (int)p->positions_y[idx0], 0, 255, 0);
         }
     }
-
 
     //dessiner_segment(buffer, p->longueur, p->largeur, (int)p->positions_x[3], (int)p->positions_y[3], (int)p->positions_x[1], (int)p->positions_y[1], 0, 255, 0);
 
@@ -190,56 +189,38 @@ void affichage_plan(plan* p, scene* sc, char* fichier){
 
 
 int main(){
-    item it = deserialize_item("teapot.obj");
+    item it = deserialize_item("cow.obj");
     
-    scene sc;
-    sc.items = NULL;
-    sc.cam.position = (vect3){0, 0.9, -1.5}; // Position de la caméra
-    sc.cam.u1 = (vect3){1, 0, 0}; // Vecteur de base pour référence
-    sc.cam.u2 = (vect3){0, 1, 0}; // Vecteur de base pour référence
-    sc.cam.u3 = (vect3){0, 0, 1}; // Vecteur de base pour référence
-    sc.taille_tab_items = 0; // Taille du tableau d'items
-    sc.cpt_items = 0; // Compteur d'items dans la scène
-
-    rotate_camera(&sc, M_PI, (vect3){0, 0, 1}); // Rotation de la caméra de 45° autour de l'axe Y
-    //translate_camera(&sc, (vect3){0, 0, 0.5}); //
-    //rotate_camera(&sc, M_PI / 4, (vect3){1, 0, 0});
+    scene sc = init_scene();
+    sc.cam.position = (vect3){0, 0, -8}; //Pour cow
+    //sc.cam.position = (vect3){0, 2, -4.3}; //Pour teapot
 
     ajouter_item(&sc, it);
-    change_ref_item_scene(&sc);
 
-    printf("Coordonnées du premier sommet après changement de référence : (%f, %f, %f)\n", sc.items[0].tab_sommets[0].position.x, sc.items[0].tab_sommets[0].position.y, sc.items[0].tab_sommets[0].position.z);
+    rotate_item(&sc.items[0], M_PI, sc.items[0].u3);
 
-    plan* p = projeter_scene(&sc);
-    affichage_plan(p, &sc, "projection.jpg");
-
-
-    float radius = 1.5; // Distance from the object
-    float center_y = 0.9; // Keep the camera at the same height as before
-    int steps = 36; // Number of frames in the circle
+    plan* p = projeter_scene(&sc); // Re-projeter la scène après rotation
+    affichage_plan(p, &sc, "projection001.jpg");
+   
+    int steps = 361; // Number of frames in the circle
 
     for(int i = 0; i < steps; i++){
         free_plan(p);
-        sleep(3);
+        usleep(500000);
 
+        //printf("%d\n", i);
+        rotate_item(&sc.items[0], (M_PI * 2) / 360, sc.items[0].u2);
+        //rotate_camera(&sc, (M_PI*2)/360, sc.cam.u2);
 
-        rotate_item(&sc.items[0], (M_PI * 2) / steps, sc.items[0].u1); // Rotate the item around the Y-axis
-        change_ref_item_scene(&sc); // Update the camera reference
-        p = projeter_scene(&sc); // Project the scene again
+        p = projeter_scene(&sc);
         affichage_plan(p, &sc, "projection.jpg"); // Save the projection to a file
-    } 
-
-    printf("nombre de positions projetées : %d\n", p->cpt_positions);
-
-    if(p->cpt_positions > 0){
-        printf("Première position projetée : (%f, %f)\n", p->positions_x[0], p->positions_y[0]);
-        printf("Dernière position projetée : (%f, %f)\n", p->positions_x[p->cpt_positions - 1], p->positions_y[p->cpt_positions - 1]);
-    } 
-    else{
-        printf("Aucune position projetée.\n");
     }
+
     free_scene(&sc);
     free_plan(p);
 
     return 0;
 }
+
+//Executer le main après la commande : gcc -Wextra -Werror -pedantic -fsanitize=address -o main proj.c scene.c mat.c -lm -ljpeg
+//Calcul dans "projection.jpg" les différentes images de la vaches tournant sur elle-même

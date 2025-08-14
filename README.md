@@ -1,8 +1,8 @@
 # Visualisateur3D  
 **Projet personnel en C : moteur de rendu 3D from scratch**
  
-L'objectif : construire un visualisateur 3D (ou un mini moteur de rendu), étape par étape dans le langage de programmation C, en comprenant chaque brique.  
-Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les références avec les fichiers correspondants (:
+L'objectif : construire un visualisateur 3D, étape par étape dans le langage de programmation C, en comprenant chaque brique.  
+Ci-dessous est décrit les différentes étapes du projet.
 
 ---
 
@@ -27,7 +27,7 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🔹 PHASE 2 — **Représentation de la scène** (Finie, 4 testée, 5 non testée)
+## 🔹 PHASE 2 — **Représentation de la scène** (Finie et testée)
 
 > On passe de la théorie à la modélisation d’objets 3D et de leur place dans une scène globale.
 
@@ -42,42 +42,42 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🔹 PHASE 3 — **Pipeline de rendu / Affichage** (En cours)
+## 🔹 PHASE 3 — **Affichage en "fil de fer"** (Finie et testée)
 
 > Transformation complète d’un objet local jusqu’à sa projection sur un écran.
 
-### 6 Uniformisation des bases (En cours)
+### 6 Uniformisation des bases (Complété)
 1. Objet (repère local) → repère monde   ✅
 2. Monde → repère caméra (vue) ✅
 
-### 7 Projection
+### 7 Projection (Complété)
 - Caméra → plan image (projection perspective) ✅
 - Division par la profondeur (x/z, y/z) ✅
 - Application d'une *viewport* (fenêtre d'affichage) ✅
  
-### 8 1er Rendu wireframe (points & segments)
+### 8 Rendu wireframe (points & segments)
 - Transformation des sommets jusqu’à l’écran ✅
 - Tracé des arêtes entre les points projetés (Algo de Bresenham) ✅
+
+---
+
+## 🔹 Phase 4 — **Affichage avec faces pleines**
 
 ### 9 2e Rendu wireframe (faces)
 - Affichage des faces
 - Système de priorité d'affichage (afin d'afficher que le visible)
 - Nuance de lumière avec méthode de Lambert
 
-### 9 Rasterisation simple
-- Console : rendu ASCII, repère Y inversé
-- SDL2 ou autre lib graphique : lignes 2D dans une fenêtre
-
 ---
 
-## 🔹 PHASE 4 — **Interaction**
+## 🔹 PHASE 5 — **Interaction**
 
 > On donne vie à la scène : zoom, rotation, déplacement…
 
 ### 10 Contrôles utilisateur
 - Rotation de la caméra autour de l’objet
 - Zoom / dézoom
-- Translation latérale (*pan*)
+- Translation latérale
 
 ### 11 Navigation & animation
 - Mise à jour du repère caméra selon les entrées
@@ -85,20 +85,20 @@ Ci-dessous est décrit les différentes étapes du projet, et si j'y arrive, les
 
 ---
 
-## 🎉 Objectif final
+## Résultats :
+ 
+<img src="teapot360.gif" alt="Aperçu d'une téhière" width="1000"/>
 
-Créer un visualisateur 3D **interactif** et **fluide**, qui permette de tourner autour d’un objet (genre une théière 🫖 ou autre), en mode *fil de fer*.
+<img src="cow.gif" alt="Aperçu d'une vache" width="1000"/>
 
 ---
-
-> ✨ Si j’arrive au bout : **je fais un post LinkedIn.**
 
 ## Sources :
 https://fr.wikipedia.org/wiki/Objet_3D_(format_de_fichier)
 https://fr.wikipedia.org/wiki/Projection_centrale
 https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_de_segment_de_Bresenham
 https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm
-
+https://fr.wikipedia.org/wiki/Loi_de_Lambert
 
 
 Commande pour compiler : gcc -Wextra -Werror -pedantic -fsanitize=address -o main proj.c scene.c mat.c -lm -ljpeg
