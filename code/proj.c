@@ -90,7 +90,7 @@ void dessiner_segment(JSAMPLE* buffer, int largeur, int longueur, int x0, int y0
     int err = dx + dy;
     int e2;
 
-    int max_steps = largeur + longueur; // or some large enough value
+    int max_steps = largeur + longueur;
     int steps = 0;
     while (true) {
         if (x0 >= 0 && x0 < largeur && y0 >= 0 && y0 < longueur) {
@@ -103,7 +103,6 @@ void dessiner_segment(JSAMPLE* buffer, int largeur, int longueur, int x0, int y0
             break;
         }
         if (++steps > max_steps) {
-            // Prevent infinite loop
             break;
         }
         e2 = 2 * err;
@@ -153,7 +152,7 @@ void affichage_plan(plan* p, scene* sc, char* fichier){
         buffer[idx + 0] = 255; // Rouge
         buffer[idx + 1] = 0;   // Vert
         buffer[idx + 2] = 0;   // Bleu  */
-        dessiner_boule(buffer, p->longueur, p->largeur, (int)p->positions_x[i], (int)p->positions_y[i], 3, 225, 0, 0); // Dessine une boule rouge de rayon 10
+        dessiner_boule(buffer, p->longueur, p->largeur, (int)p->positions_x[i], (int)p->positions_y[i], 3, 225, 0, 0);
         }
     }
 
@@ -213,7 +212,7 @@ int main(){
         //rotate_camera(&sc, (M_PI*2)/360, sc.cam.u2);
 
         p = projeter_scene(&sc);
-        affichage_plan(p, &sc, "../images/projection.jpg"); // Save the projection to a file
+        affichage_plan(p, &sc, "../images/projection.jpg");
     }
 
     free_scene(&sc);
