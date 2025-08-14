@@ -94,14 +94,21 @@ Ci-dessous est décrit les différentes étapes du projet.
 ---
 
 ## Sources :
-https://fr.wikipedia.org/wiki/Objet_3D_(format_de_fichier)
-https://fr.wikipedia.org/wiki/Projection_centrale
-https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_de_segment_de_Bresenham
-https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm
+https://fr.wikipedia.org/wiki/Objet_3D_(format_de_fichier)<br>
+https://fr.wikipedia.org/wiki/Projection_centrale<br>
+https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_de_segment_de_Bresenham<br>
+https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm<br>
 https://fr.wikipedia.org/wiki/Loi_de_Lambert
 
 
-Commande pour compiler : gcc -Wextra -Werror -pedantic -fsanitize=address -o main proj.c scene.c mat.c -lm -ljpeg
+> Commande pour compiler : gcc -Wextra -Werror -pedantic -fsanitize=address -o main proj.c scene.c mat.c -lm -ljpeg
+
+---
+
+Ce projet est distribué sous licence Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+Voir le fichier LICENSE pour plus de détails.
+
+
 
 
 
