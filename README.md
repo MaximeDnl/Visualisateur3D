@@ -1,8 +1,9 @@
 # Visualisateur3D  
 **Projet personnel en C : moteur de rendu 3D from scratch**
  
-L'objectif : construire un visualisateur 3D, étape par étape dans le langage de programmation C, en comprenant chaque brique.  
-Ci-dessous est décrit les différentes étapes du projet.
+L'objectif : construire un visualisateur 3D, étape par étape dans le langage de programmation C, en comprenant chaque brique.
+  
+Ci-dessous est décrit les différentes étapes du projet. Cette segmentation s'appuie dans un premier temps de ChatGpt afin d'aiguiller mon travail, et modifiée par mes soins à la suites de différentes recherches afin de correspondre à mon projet.
 
 ---
 
